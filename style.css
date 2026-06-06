@@ -6,7 +6,7 @@ body {
     background-color: #f7f7f5;
 }
 
-/* --- ENCABEZADO (LOGO Y TÍTULO) --- */
+/* --- ENCABEZADO --- */
 .header {
     display: flex;
     align-items: center;
@@ -17,17 +17,17 @@ body {
 }
 
 .logo {
-    width: 200px; /* Tamaño optimizado */
+    width: 200px;
     height: auto;
 }
 
 .titulo {
     font-size: 3rem;
-    color: #5d3523; /* Color café artesanal */
+    color: #5d3523; /* Café Artesanal */
     margin: 0;
 }
 
-/* --- LISTA DE BOTONES (DESKTOP / MACBOOK) --- */
+/* --- NAVEGACIÓN Y BOTONES ESTIRADOS --- */
 .lista-servicios {
     display: flex;
     justify-content: center;
@@ -35,13 +35,13 @@ body {
     list-style: none;
     padding: 20px;
     margin: 0;
-    flex-wrap: wrap; /* Permite que bajen si no caben */
+    flex-wrap: wrap;
 }
 
 .lista-servicios li {
     background-color: #d35400; /* Naranja Terracota */
     color: white;
-    padding: 12px 50px; /* Estilo estirado que pediste */
+    padding: 12px 50px;
     border-radius: 50px;
     cursor: pointer;
     font-weight: bold;
@@ -52,7 +52,6 @@ body {
     white-space: nowrap;
 }
 
-/* --- EFECTOS DE INTERACCIÓN --- */
 .lista-servicios li:hover {
     background-color: #e67e22;
     transform: translateY(-3px);
@@ -60,144 +59,306 @@ body {
 }
 
 .lista-servicios li:active {
-    transform: translateY(2px); /* Efecto de hundirse al hacer clic */
+    transform: translateY(2px);
     background-color: #a04000;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-/* --- DISEÑO PARA TELÉFONO (IPHONE) --- */
-@media (max-width: 600px) {
+/* --- CONTENEDOR DE CONTENIDO --- */
+.seccion-contenido {
+    padding: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+    animation: fadeIn 0.5s ease;
+}
+
+.seccion-titulo {
+    font-size: 2.2rem;
+    color: #5d3523;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.txt-centrado {
+    text-align: center;
+    color: #555;
+}
+
+/* ESTRUCTURA DE LA BIENVENIDA (FLEXBOX) */
+.contenedor_principal {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    margin-top: 20px;
+}
+
+.descripcion-inicio {
+    text-align: justify;
+    font-size: 1.15rem;
+    line-height: 1.7;
+    color: #444;
+    margin: 0;
+}
+
+/* --- VISOR Y ANIMACIÓN DEL CARRUSEL --- */
+.visor-carrusel {
+    width: 400px;
+    height: 300px;
+    overflow: hidden;
+    margin: 0 auto;
+    border: 3px solid #5d3523;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    flex-shrink: 0;
+}
+
+.pista-imagenes {
+    display: flex;
+    width: 500%;
+    animation: diapositiva 15s infinite cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.pista-imagenes img {
+    width: 400px;
+    height: 300px;
+    object-fit: cover;
+}
+
+@keyframes diapositiva {
+    0%   { transform: translateX(0); }
+    16%  { transform: translateX(0); }
+    20%  { transform: translateX(-400px); }
+    36%  { transform: translateX(-400px); }
+    40%  { transform: translateX(-800px); }
+    56%  { transform: translateX(-800px); }
+    60%  { transform: translateX(-1200px); }
+    76%  { transform: translateX(-1200px); }
+    80%  { transform: translateX(-1600px); }
+    96%  { transform: translateX(-1600px); }
+    100% { transform: translateX(0); }
+}
+
+/* --- GRID DE PRODUCTOS / TARJETAS --- */
+.contenedor-productos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.tarjeta {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    border: 1px solid #eaeae6;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.tarjeta:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.img-producto {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.info-producto {
+    padding: 20px;
+}
+
+.info-producto h3 {
+    margin: 0 0 8px 0;
+    color: #5d3523;
+    font-size: 1.3rem;
+}
+
+.autor-tag {
+    font-size: 0.85rem;
+    color: #d35400;
+    font-weight: bold;
+    margin: 0 0 12px 0;
+}
+
+.info-producto p {
+    margin: 0;
+    color: #666;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.precio {
+    display: block;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #27ae60;
+    margin-top: 15px;
+}
+
+/* --- COMPONENTES DEL PORTAL FORMULARIO --- */
+.subtitulo-portal {
+    text-align: center;
+    color: #7f8c8d;
+    margin-top: -15px;
+    margin-bottom: 30px;
+    font-style: italic;
+}
+
+.formulario-box {
+    background-color: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border-top: 5px solid #d35400;
+    max-width: 500px;
+    margin: 20px auto;
+}
+
+.formulario-box h3 {
+    margin-top: 0;
+    color: #5d3523;
+    font-size: 1.4rem;
+}
+
+.header-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-panel h3 { margin: 0; }
+
+.separador {
+    border: 0;
+    height: 1px;
+    background: #e0e0e0;
+    margin: 15px 0 20px 0;
+}
+
+.input-grupo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 18px;
+}
+
+.input-grupo label {
+    font-weight: bold;
+    color: #444;
+    font-size: 0.9rem;
+}
+
+.input-grupo input, 
+.input-grupo select, 
+.input-grupo textarea {
+    padding: 12px;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+.input-grupo textarea {
+    resize: vertical;
+    min-height: 90px;
+}
+
+.input-grupo input:focus, .input-grupo select:focus, .input-grupo textarea:focus {
+    outline: none;
+    border-color: #d35400;
+}
+
+.aviso-input {
+    color: #7f8c8d;
+    font-size: 0.75rem;
+}
+
+.btn-primario {
+    background-color: #d35400;
+    color: white;
+    border: none;
+    padding: 14px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.2s;
+}
+
+.btn-primario:hover { background-color: #e67e22; }
+
+.btn-secundario {
+    background-color: #bdc3c7;
+    color: #333;
+    border: none;
+    padding: 8px 15px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* ANIMACIONES */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animated-in {
+    animation: tarjetaEntrada 0.4s ease forwards;
+}
+
+@keyframes tarjetaEntrada {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* --- RESPONSIVO (MÓVILES / IPHONE) --- */
+@media (max-width: 768px) {
     .header {
-        flex-direction: column; /* Logo arriba, texto abajo */
+        flex-direction: column;
         gap: 10px;
         padding: 20px;
     }
 
-    .logo {
-        width: 150px;
-    }
-
-    .titulo {
-        font-size: 2rem;
-        text-align: center;
-    }
+    .logo { width: 140px; }
+    .titulo { font-size: 2.2rem; text-align: center; }
 
     .lista-servicios {
-        flex-direction: column; /* Botones uno debajo del otro */
+        flex-direction: column;
         align-items: center;
         padding: 10px;
     }
 
     .lista-servicios li {
-        width: 80%; /* Botones anchos para tocar fácil con el dedo */
-        padding: 15px 20px; /* Ajuste de tamaño para móvil */
+        width: 85%;
+        padding: 14px 20px;
     }
-}
 
+    .contenedor_principal {
+        flex-direction: column;
+        gap: 25px;
+    }
 
-
-.seccion-contenido {
-    
-    text-justify: auto;
-    padding: 20px;
-    max-width: 900px;
-    margin: 0 auto;
-    animation: fadeIn 0.5s ease; /* Efecto de aparición suave */
-}
-.contenedor_principal {
-    display: flex;
-    
-    align-items: center;
-    gap: 30px;
-}
-.img-producto {
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    margin-bottom: 20px;
-}
-.descripcion-inicio {
-    text-align: center;
-    font-size: 1.2rem;
-    line-height: 1.6;
-    color: #444;
-}
-.seccion-titulo {
-    font-size: 2rem;
-    color: #5d3523;
-    margin-bottom: 20px;
-    text-align: center;
-}
-/* Animación de entrada */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}   
-
-
-
-
-/* --- CORRECCIÓN DEL CARRUSEL (RESPONSIVO Y EXACTO) --- */
-
-/* El cuadro contenedor (ahora mide un tamaño fijo estándar para mantener proporción) */
-.visor-carrusel {
-    width: 400px;           /* Debe coincidir EXACTAMENTE con el ancho de una imagen */
-    height: 300px;          
-    overflow: hidden;       /* Esconde las imágenes que están en cola */
-    margin: 0 auto;         /* Centrado */
-    border: 3px solid #5d3523; /* Usando tu café artesanal */
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    flex-shrink: 0;         /* Evita que el contenedor se deforme dentro del flexbox */
-}
-
-/* La pista interna que contiene las 5 imágenes */
-.pista-imagenes {
-    display: flex;
-    width: 500%;            /* 500% porque tienes 5 imágenes */
-    animation: diapositiva 15s infinite cubic-bezier(0.77, 0, 0.175, 1);
-}
-
-.pista-imagenes img {
-    width: 400px;           /* Cada imagen toma el ancho exacto del visor */
-    height: 300px;          
-    object-fit: cover;      /* Recorta la imagen limpiamente sin deformar */
-}
-
-/* Animación ajustada exactamente para 5 imágenes (pasos de 20% en 20%) */
-@keyframes diapositiva {
-    0%   { transform: translateX(0); }                 /* Foto 1 (Artesano) */
-    16%  { transform: translateX(0); }
-    20%  { transform: translateX(-400px); }            /* Foto 2 (Artesanía) */
-    36%  { transform: translateX(-400px); }
-    40%  { transform: translateX(-800px); }            /* Foto 3 (Traje) */
-    56%  { transform: translateX(-800px); }
-    60%  { transform: translateX(-1200px); }           /* Foto 4 (Vigorón) */
-    76%  { transform: translateX(-1200px); }
-    80%  { transform: translateX(-1600px); }           /* Foto 5 (Tu-Logo) */
-    96%  { transform: translateX(-1600px); }
-    100% { transform: translateX(0); }                 /* Regreso fluido al inicio */
-}
-
-/* Ajuste rápido para pantallas móviles (iPhone) */
-@media (max-width: 600px) {
     .visor-carrusel, .pista-imagenes img {
-        width: 280px;  /* Más pequeño para pantallas de celulares */
-        height: 210px; /* Mantiene la proporción 4:3 */
+        width: 300px;
+        height: 225px;
     }
-    /* Ajustamos el desplazamiento de la animación para pantallas móviles */
+
     @keyframes diapositiva {
         0%   { transform: translateX(0); }
         16%  { transform: translateX(0); }
-        20%  { transform: translateX(-280px); }
-        36%  { transform: translateX(-280px); }
-        40%  { transform: translateX(-560px); }
-        56%  { transform: translateX(-560px); }
-        60%  { transform: translateX(-840px); }
-        76%  { transform: translateX(-840px); }
-        80%  { transform: translateX(-1120px); }
-        96%  { transform: translateX(-1120px); }
+        20%  { transform: translateX(-300px); }
+        36%  { transform: translateX(-300px); }
+        40%  { transform: translateX(-600px); }
+        56%  { transform: translateX(-600px); }
+        60%  { transform: translateX(-900px); }
+        76%  { transform: translateX(-900px); }
+        80%  { transform: translateX(-1200px); }
+        96%  { transform: translateX(-1200px); }
         100% { transform: translateX(0); }
     }
 }
