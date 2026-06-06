@@ -138,39 +138,66 @@ body {
 
 
 
-/* El cuadro que verá el usuario carrusel 1*/
+/* --- CORRECCIÓN DEL CARRUSEL (RESPONSIVO Y EXACTO) --- */
+
+/* El cuadro contenedor (ahora mide un tamaño fijo estándar para mantener proporción) */
 .visor-carrusel {
-    width: 3000px;           /* Ajusta este ancho a tu gusto */
-    height: auto;          /* Ajusta este alto a tu gusto */
-    overflow: hidden;       /* Esconde las otras 4 imágenes */
-    margin: auto;      /* Lo centra en la página */
-    border: 2px solid #81563b; /* El café de Manos Granadinas */
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    width: 400px;           /* Debe coincidir EXACTAMENTE con el ancho de una imagen */
+    height: 300px;          
+    overflow: hidden;       /* Esconde las imágenes que están en cola */
+    margin: 0 auto;         /* Centrado */
+    border: 3px solid #5d3523; /* Usando tu café artesanal */
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    flex-shrink: 0;         /* Evita que el contenedor se deforme dentro del flexbox */
 }
 
-/* La fila de imágenes */
+/* La pista interna que contiene las 5 imágenes */
 .pista-imagenes {
     display: flex;
-    width: 600%;            /* 600% porque son 6 imágenes en total (5 + 1 repetida) */
+    width: 500%;            /* 500% porque tienes 5 imágenes */
     animation: diapositiva 15s infinite cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 .pista-imagenes img {
-    width: 400px;           /* Debe ser el mismo ancho que el visor */
-    height: 300px;          /* Debe ser el mismo alto que el visor */
-    object-fit: cover;      /* Evita que la imagen se estire feo */
+    width: 400px;           /* Cada imagen toma el ancho exacto del visor */
+    height: 300px;          
+    object-fit: cover;      /* Recorta la imagen limpiamente sin deformar */
 }
-/* La animación por pasos (para que se quede quieta un momento en cada foto) */
+
+/* Animación ajustada exactamente para 5 imágenes (pasos de 20% en 20%) */
 @keyframes diapositiva {
-    0%   { transform: translateX(0); }             /* Foto 1 */
-    15%  { transform: translateX(0); }
-    20%  { transform: translateX(-400px); }        /* Foto 2 */
-    35%  { transform: translateX(-400px); }
-    40%  { transform: translateX(-800px); }        /* Foto 3 */
-    55%  { transform: translateX(-800px); }
-    60%  { transform: translateX(-1200px); }       /* Foto 4 */
-    75%  { transform: translateX(-1200px); }
-    80%  { transform: translateX(-1600px); }       /* Foto 5 */
-    95%  { transform: translateX(-1600px); }      /* Salto a la repetida y reinicio */
+    0%   { transform: translateX(0); }                 /* Foto 1 (Artesano) */
+    16%  { transform: translateX(0); }
+    20%  { transform: translateX(-400px); }            /* Foto 2 (Artesanía) */
+    36%  { transform: translateX(-400px); }
+    40%  { transform: translateX(-800px); }            /* Foto 3 (Traje) */
+    56%  { transform: translateX(-800px); }
+    60%  { transform: translateX(-1200px); }           /* Foto 4 (Vigorón) */
+    76%  { transform: translateX(-1200px); }
+    80%  { transform: translateX(-1600px); }           /* Foto 5 (Tu-Logo) */
+    96%  { transform: translateX(-1600px); }
+    100% { transform: translateX(0); }                 /* Regreso fluido al inicio */
+}
+
+/* Ajuste rápido para pantallas móviles (iPhone) */
+@media (max-width: 600px) {
+    .visor-carrusel, .pista-imagenes img {
+        width: 280px;  /* Más pequeño para pantallas de celulares */
+        height: 210px; /* Mantiene la proporción 4:3 */
+    }
+    /* Ajustamos el desplazamiento de la animación para pantallas móviles */
+    @keyframes diapositiva {
+        0%   { transform: translateX(0); }
+        16%  { transform: translateX(0); }
+        20%  { transform: translateX(-280px); }
+        36%  { transform: translateX(-280px); }
+        40%  { transform: translateX(-560px); }
+        56%  { transform: translateX(-560px); }
+        60%  { transform: translateX(-840px); }
+        76%  { transform: translateX(-840px); }
+        80%  { transform: translateX(-1120px); }
+        96%  { transform: translateX(-1120px); }
+        100% { transform: translateX(0); }
+    }
 }
