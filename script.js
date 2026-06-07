@@ -5,16 +5,13 @@ const secciones = document.querySelectorAll('.seccion-contenido');
 // 1. Lógica del Enrutador de Pestañas
 botones.forEach(boton => {
     boton.addEventListener('click', () => {
-        // Escondemos todas las secciones primero
         secciones.forEach(seccion => {
             seccion.style.display = 'none';
         });
 
-        // Limpiamos acentos y pasamos a minúsculas para coincidir con los IDs
         const textoBoton = boton.innerText.toLowerCase()
                             .normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
-        // Mostramos la sección activa
         const seccionAMostrar = document.getElementById(textoBoton);
         if (seccionAMostrar) {
             seccionAMostrar.style.display = 'block';
@@ -22,7 +19,16 @@ botones.forEach(boton => {
     });
 });
 
-// 2. Sistema del Portal Automatizado para Emprendedores
+// ==========================================
+// PARÁMETROS DE LLAVES DE ACCESO (GENERAL)
+// ==========================================
+const usuariosAutorizados = {
+    "artes_pantanal": { nombreNegocio: "Artesanías El Pantanal", password: "granada2026" },
+    "antojitos_cuevas": { nombreNegocio: "Antojitos Cuevas", password: "panaderia_mary" },
+    "textiles_sultana": { nombreNegocio: "Bordados La Sultana", password: "textiles_local" }
+};
+
+// Componentes del Portal
 const authPanel = document.getElementById('auth-panel');
 const uploadPanel = document.getElementById('upload-panel');
 const btnIngresar = document.getElementById('btn-ingresar');
@@ -30,25 +36,31 @@ const btnCerrarSesion = document.getElementById('btn-cerrar-sesion');
 const nombreNegocioTxt = document.getElementById('nombre-negocio-txt');
 const formProducto = document.getElementById('form-producto');
 
+// Variable global para recordar el nombre comercial activo
 let negocioActual = "";
-let categoriaActual = "";
 
-// Login Simulado
+// 2. Control de Acceso General
 btnIngresar.addEventListener('click', () => {
-    const nombreInput = document.getElementById('emp-nombre').value.trim();
-    const categoriaInput = document.getElementById('emp-categoria').value;
+    const usuarioInput = document.getElementById('emp-usuario').value.trim();
+    const passwordInput = document.getElementById('emp-password').value;
 
-    if (nombreInput === "") {
-        alert("Por favor, introduce el nombre de tu emprendimiento para continuar.");
-        return;
+    const cuentaEncontrada = usuariosAutorizados[usuarioInput];
+
+    if (cuentaEncontrada && cuentaEncontrada.password === passwordInput) {
+        negocioActual = cuentaEncontrada.nombreNegocio;
+
+        // Cambiamos la interfaz del panel
+        nombreNegocioTxt.innerText = negocioActual;
+        
+        authPanel.style.display = 'none';
+        uploadPanel.style.display = 'block';
+        
+        // Limpiamos los campos del login
+        document.getElementById('emp-usuario').value = "";
+        document.getElementById('emp-password').value = "";
+    } else {
+        alert("Error de autenticación: Usuario o contraseña incorrectos.");
     }
-
-    negocioActual = nombreInput;
-    categoriaActual = categoriaInput;
-
-    nombreNegocioTxt.innerText = negocioActual;
-    authPanel.style.display = 'none';
-    uploadPanel.style.display = 'block';
 });
 
 // Desconexión del Panel
@@ -58,10 +70,11 @@ btnCerrarSesion.addEventListener('click', () => {
     formProducto.reset();
 });
 
-// Procesar y Publicar Producto en la sección asignada
+// 3. Procesar y Publicar en la Categoría Elegida por el Usuario
 formProducto.addEventListener('submit', (e) => {
     e.preventDefault();
 
+    const categoriaElegida = document.getElementById('prod-categoria').value; // <--- Lee la opción que seleccionó el usuario
     const prodNombre = document.getElementById('prod-nombre').value;
     const prodDescripcion = document.getElementById('prod-descripcion').value;
     const prodPrecio = document.getElementById('prod-precio').value;
@@ -73,7 +86,6 @@ formProducto.addEventListener('submit', (e) => {
     reader.onload = function(event) {
         const urlImagen = event.target.result;
 
-        // Estructura limpia de la tarjeta inyectada
         const nuevaTarjetaHTML = `
             <div class="tarjeta animated-in">
                 <img src="${urlImagen}" alt="${prodNombre}" class="img-producto">
@@ -86,20 +98,18 @@ formProducto.addEventListener('submit', (e) => {
             </div>
         `;
 
-        const seccionDestino = document.getElementById(categoriaActual);
+        const seccionDestino = document.getElementById(categoriaElegida);
         let contenedorProductos = seccionDestino.querySelector('.contenedor-productos');
 
-        // Si el contenedor Grid no existe en esa pestaña, se autogenera en el momento
         if (!contenedorProductos) {
             contenedorProductos = document.createElement('div');
             contenedorProductos.className = 'contenedor-productos';
             seccionDestino.appendChild(contenedorProductos);
         }
 
-        // Se inserta de primero en el catálogo de la sección
         contenedorProductos.insertAdjacentHTML('afterbegin', nuevaTarjetaHTML);
 
-        alert(`¡Éxito! Tu producto se ha incorporado automáticamente al catálogo de ${categoriaActual.toUpperCase()}.`);
+        alert(`¡Éxito! Tu producto se incorporó de forma automática a la sección de ${categoriaElegida.toUpperCase()}.`);
         formProducto.reset();
     };
 

@@ -37,7 +37,7 @@
                         <img src="imagen3.jpeg" alt="Logo Colaborador" class="tu-logo">         
                     </div>
                 </div>
-                <p class="descripcion-inicio">"Manos Granadinas es la plataforma de visibilidad estratégica para el talento local. Nuestra misión es potenciar a los artesanos y emprendedores de la Gran Sultana, integrando la tradición con la era digital. Facilitamos un espacio donde la calidad de nuestra manufactura y la riqueza de nuestra gastronomía se encuentran con el consumidor moderno. Impulsamos el crecimiento económico local a través de la identidad y la excellence artesanal."</p>
+                <p class="descripcion-inicio">"Manos Granadinas es la plataforma de visibilidad estratégica para el talento local. Nuestra misión es potenciar a los artesanos y emprendedores de la Gran Sultana, integrando la tradición con la era digital. Facilitamos un espacio donde la calidad de nuestra manufactura y la riqueza de nuestra gastronomía se encuentran con el consumidor moderno. Impulsamos el crecimiento económico local a través de la identidad y la excelencia artesanal."</p>
             </div>
         </div>
 
@@ -70,34 +70,42 @@
         
         <div id="emprendedor" class="seccion-contenido" style="display: none;">
             <h2 class="seccion-titulo">Portal de Emprendedores Locales</h2>
-            <p class="subtitulo-portal">Potenciando el comercio de la Gran Sultana</p>
+            <p class="subtitulo-portal">Acceso exclusivo para miembros autorizados</p>
 
             <div id="auth-panel" class="formulario-box">
-                <h3>Acceso al Catálogo</h3>
+                <h3>Iniciar Sesión</h3>
                 <div class="input-grupo">
-                    <label for="emp-nombre">Nombre del Emprendimiento:</label>
-                    <input type="text" id="emp-nombre" placeholder="Ej. Cerámicas El Castillo">
+                    <label for="emp-usuario">Usuario del Emprendimiento:</label>
+                    <input type="text" id="emp-usuario" placeholder="Ej. ceramicas_castillo">
                 </div>
                 <div class="input-grupo">
-                    <label for="emp-categoria">Categoría de Negocio:</label>
-                    <select id="emp-categoria">
-                        <option value="artesanias">Artesanías</option>
-                        <option value="gastronomia">Gastronomía</option>
-                        <option value="textiles">Textiles</option>
-                    </select>
+                    <label for="emp-password">Contraseña de Acceso:</label>
+                    <input type="password" id="emp-password" placeholder="••••••••">
                 </div>
-                <button id="btn-ingresar" class="btn-primario">Ingresar al Panel</button>
+                <button id="btn-ingresar" class="btn-primario">Verificar Credenciales</button>
             </div>
 
             <div id="upload-panel" class="formulario-box" style="display: none;">
                 <div class="header-panel">
-                    <h3>Panel: <span id="nombre-negocio-txt"></span></h3>
+                    <div>
+                        <h3 id="nombre-negocio-txt">Nombre del Negocio</h3>
+                        <small style="color: #27ae60; font-weight: bold;">Acceso Autorizado ✓</small>
+                    </div>
                     <button id="btn-cerrar-sesion" class="btn-secundario">Salir</button>
                 </div>
                 
                 <hr class="separador">
 
                 <form id="form-producto">
+                    <div class="input-grupo">
+                        <label for="prod-categoria">¿En qué sección deseas publicar?</label>
+                        <select id="prod-categoria">
+                            <option value="artesanias">Artesanías</option>
+                            <option value="gastronomia">Gastronomía</option>
+                            <option value="textiles">Textiles</option>
+                        </select>
+                    </div>
+
                     <div class="input-grupo">
                         <label for="prod-nombre">Nombre del Producto / Platillo:</label>
                         <input type="text" id="prod-nombre" placeholder="Ej. Macetera de Barro" required>
