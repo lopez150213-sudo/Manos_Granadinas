@@ -217,10 +217,40 @@ body {
     margin: 20px auto;
 }
 
+/* TABS INTERNAS DE LOGIN / REGISTRO */
+.tabs-auth {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 25px;
+    background-color: #f2f2f0;
+    border-radius: 8px;
+    padding: 5px;
+}
+
+.btn-tab {
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #7f8c8d;
+    cursor: pointer;
+    border-radius: 6px;
+    width: 50%;
+    transition: all 0.2s;
+}
+
+.btn-tab.activo {
+    background-color: white;
+    color: #d35400;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
 .formulario-box h3 {
     margin-top: 0;
     color: #5d3523;
     font-size: 1.4rem;
+    text-align: center;
 }
 
 .header-panel {
@@ -229,7 +259,7 @@ body {
     align-items: center;
 }
 
-.header-panel h3 { margin: 0; }
+.header-panel h3 { margin: 0; text-align: left; }
 
 .separador {
     border: 0;
@@ -259,6 +289,22 @@ body {
     border-radius: 8px;
     font-family: inherit;
     font-size: 1rem;
+}
+
+/* CAJA DE GEOPOSICIÓN */
+.geo-contenedor {
+    display: flex;
+    gap: 10px;
+}
+
+.geo-contenedor button {
+    white-space: nowrap;
+}
+
+.geo-contenedor input {
+    flex-grow: 1;
+    background-color: #f9f9f9;
+    text-align: center;
 }
 
 .input-grupo textarea {
@@ -295,10 +341,11 @@ body {
     background-color: #bdc3c7;
     color: #333;
     border: none;
-    padding: 8px 15px;
+    padding: 12px 15px;
     font-weight: bold;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
+    transition: background 0.2s;
 }
 
 /* ANIMACIONES */
@@ -346,6 +393,10 @@ body {
     .visor-carrusel, .pista-imagenes img {
         width: 300px;
         height: 225px;
+    }
+
+    .geo-contenedor {
+        flex-direction: column;
     }
 
     @keyframes diapositiva {

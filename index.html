@@ -37,52 +37,91 @@
                         <img src="imagen3.jpeg" alt="Logo Colaborador" class="tu-logo">         
                     </div>
                 </div>
-                <p class="descripcion-inicio">"Manos Granadinas es la plataforma de visibilidad estratégica para el talento local. Nuestra misión es potenciar a los artesanos y emprendedores de la Gran Sultana, integrando la tradición con la era digital. Facilitamos un espacio donde la calidad de nuestra manufactura y la riqueza de nuestra gastronomía se encuentran con el consumidor moderno. Impulsamos el crecimiento económico local a través de la identidad y la excelencia artesanal."</p>
+                <p class="descripcion-inicio">"Manos Granadinas es la plataforma de visibilidad estratégica para el talento local. Nuestra misión es potenciar a los artesanos y emprendedores de la Gran Sultana, integrando la tradición con la era digital..."</p>
             </div>
         </div>
 
         <div id="artesanias" class="seccion-contenido" style="display: none;">
             <h2 class="seccion-titulo">Artesanías Auténticas</h2>
-            <div class="contenedor-productos">
-                <div class="tarjeta">
-                    <img src="artesano1.jpg" alt="Hamaca" class="img-producto">
-                    <div class="info-producto">
-                        <h3>Hamaca de Hilo</h3>
-                        <p class="autor-tag">Por: Artesanos Locales</p>
-                        <p>Hecha a mano en El Pantanal.</p>
-                        <span class="precio">C$ 1,200</span>
-                    </div>
-                </div>
-            </div>
+            <div class="contenedor-productos"></div>
         </div>
 
         <div id="gastronomia" class="seccion-contenido" style="display: none;">
             <h2 class="seccion-titulo">Sabor Granadino</h2>
-            <p class="txt-centrado">Disfruta de los mejores platillos de nuestra ciudad.</p>
             <div class="contenedor-productos"></div>
         </div>
 
         <div id="textiles" class="seccion-contenido" style="display: none;">
             <h2 class="seccion-titulo">Textiles Tradicionales</h2>
-            <p class="txt-centrado">Descubre la riqueza de nuestros tejidos y bordados.</p>
             <div class="contenedor-productos"></div>
         </div>
         
         <div id="emprendedor" class="seccion-contenido" style="display: none;">
             <h2 class="seccion-titulo">Portal de Emprendedores Locales</h2>
-            <p class="subtitulo-portal">Acceso exclusivo para miembros autorizados</p>
+            <p class="subtitulo-portal">Gestión de accesos y registros comerciales</p>
 
             <div id="auth-panel" class="formulario-box">
-                <h3>Iniciar Sesión</h3>
-                <div class="input-grupo">
-                    <label for="emp-usuario">Usuario del Emprendimiento:</label>
-                    <input type="text" id="emp-usuario" placeholder="Ej. ceramicas_castillo">
+                <div class="tabs-auth">
+                    <button id="tab-login" class="btn-tab activo">Iniciar Sesión</button>
+                    <button id="tab-registro" class="btn-tab">Registrarse</button>
                 </div>
-                <div class="input-grupo">
-                    <label for="emp-password">Contraseña de Acceso:</label>
-                    <input type="password" id="emp-password" placeholder="••••••••">
+
+                <div id="form-login-box">
+                    <h3>Ingresar al Panel</h3>
+                    <div class="input-grupo">
+                        <label for="emp-usuario">Usuario del Emprendimiento:</label>
+                        <input type="text" id="emp-usuario" placeholder="Ej. ceramicas_castillo">
+                    </div>
+                    <div class="input-grupo">
+                        <label for="emp-password">Contraseña:</label>
+                        <input type="password" id="emp-password" placeholder="••••••••">
+                    </div>
+                    <button id="btn-ingresar" class="btn-primario">Verificar Credenciales</button>
                 </div>
-                <button id="btn-ingresar" class="btn-primario">Verificar Credenciales</button>
+
+                <div id="form-registro-box" style="display: none;">
+                    <h3>Crear Cuenta de Emprendedor</h3>
+                    <div class="input-grupo">
+                        <label for="reg-nombre-comercial">Nombre del Emprendimiento:</label>
+                        <input type="text" id="reg-nombre-comercial" placeholder="Ej. Cerámicas El Castillo">
+                    </div>
+                    <div class="input-grupo">
+                        <label for="reg-correo">Correo Electrónico:</label>
+                        <input type="email" id="reg-correo" placeholder="ejemplo@correo.com">
+                    </div>
+                    <div class="input-grupo">
+                        <label for="reg-telefono">Número de Teléfono (WhatsApp):</label>
+                        <input type="tel" id="reg-telefono" placeholder="Ej. 88888888">
+                    </div>
+                    <div class="input-grupo">
+                        <label>Geoposición Comercial:</label>
+                        <div class="geo-contenedor">
+                            <button id="btn-obtener-geo" class="btn-secundario">📍 Ubicación GPS</button>
+                            <input type="text" id="reg-geoposicion" placeholder="Latitud, Longitud" readonly>
+                        </div>
+                    </div>
+                    <div class="input-grupo">
+                        <label for="reg-usuario">Crea tu Usuario:</label>
+                        <input type="text" id="reg-usuario" placeholder="Ej. ceramicas_castillo">
+                    </div>
+                    <div class="input-grupo">
+                        <label for="reg-password">Crea tu Contraseña:</label>
+                        <input type="password" id="reg-password" placeholder="Mínimo 6 caracteres">
+                    </div>
+                    <button id="btn-registrar-cuenta" class="btn-primario">Solicitar Registro</button>
+                </div>
+            </div>
+
+            <div id="activation-panel" class="formulario-box" style="display: none; border-top-color: #f1c40f;">
+                <h3>🔒 Validación de Cuenta</h3>
+                <p style="text-align: center; font-size: 0.9rem; color: #555;">Tu solicitud fue enviada por WhatsApp al administrador. Introduce el código de activación para liberar el acceso.</p>
+                
+                <div class="input-grupo" style="margin-top: 20px;">
+                    <label for="activation-code-input" style="text-align: center; display: block;">Código de Activación:</label>
+                    <input type="text" id="activation-code-input" placeholder="Ej. MG-1234" style="text-align: center; font-size: 1.3rem; font-weight: bold; letter-spacing: 2px;">
+                </div>
+                <button id="btn-verificar-codigo" class="btn-primario" style="background-color: #f1c40f; color: #333;">Activar Mi Cuenta</button>
+                <button id="btn-cancelar-activacion" class="btn-secundario" style="width: 100%; margin-top: 10px; padding: 12px;">Volver</button>
             </div>
 
             <div id="upload-panel" class="formulario-box" style="display: none;">
@@ -93,9 +132,7 @@
                     </div>
                     <button id="btn-cerrar-sesion" class="btn-secundario">Salir</button>
                 </div>
-                
                 <hr class="separador">
-
                 <form id="form-producto">
                     <div class="input-grupo">
                         <label for="prod-categoria">¿En qué sección deseas publicar?</label>
@@ -105,28 +142,22 @@
                             <option value="textiles">Textiles</option>
                         </select>
                     </div>
-
                     <div class="input-grupo">
                         <label for="prod-nombre">Nombre del Producto / Platillo:</label>
-                        <input type="text" id="prod-nombre" placeholder="Ej. Macetera de Barro" required>
+                        <input type="text" id="prod-nombre" required>
                     </div>
-
                     <div class="input-grupo">
-                        <label for="prod-descripcion">Descripción Comercial (Especificar zona de Granada):</label>
-                        <textarea id="prod-descripcion" placeholder="Ej. Elaborado a mano por artesanos de El Pantanal..." required></textarea>
+                        <label for="prod-descripcion">Descripción Comercial:</label>
+                        <textarea id="prod-descripcion" required></textarea>
                     </div>
-
                     <div class="input-grupo">
-                        <label for="prod-precio">Precio (C$ Córdobas):</label>
-                        <input type="number" id="prod-precio" placeholder="Ej. 350" required>
+                        <label for="prod-precio">Precio (C$):</label>
+                        <input type="number" id="prod-precio" required>
                     </div>
-
                     <div class="input-grupo">
                         <label for="prod-foto">Foto del Producto:</label>
                         <input type="file" id="prod-foto" accept="image/*" required>
-                        <small class="aviso-input">Utiliza fotos claras y bien iluminadas de tus creaciones.</small>
                     </div>
-
                     <button type="submit" class="btn-primario">Publicar en Catálogo Automático</button>
                 </form>
             </div>
