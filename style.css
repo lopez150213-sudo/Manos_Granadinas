@@ -39,9 +39,10 @@ body {
 }
 
 .lista-servicios li {
-    background-color: #d35400; /* Naranja Terracota */
+    background-color: #1A3258; /* Naranja Terracota */
     color: white;
     padding: 12px 50px;
+    border: 2px solid #000;
     border-radius: 50px;
     cursor: pointer;
     font-weight: bold;
@@ -53,14 +54,14 @@ body {
 }
 
 .lista-servicios li:hover {
-    background-color: #e67e22;
+    background-color: #1A3258;
     transform: translateY(-3px);
     box-shadow: 0 8px 15px rgba(0,0,0,0.2);
 }
 
 .lista-servicios li:active {
     transform: translateY(2px);
-    background-color: #a04000;
+    background-color: #2537fc;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
@@ -195,7 +196,136 @@ body {
     font-size: 1.3rem;
     font-weight: bold;
     color: #27ae60;
+}
+
+/* --- FOOTER DE LA TARJETA (PRECIO Y BOTONES ALINEADOS) --- */
+.footer-tarjeta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     margin-top: 15px;
+    gap: 10px;
+}
+
+.acciones-emprendedor {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.btn-accion {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    transition: transform 0.2s, background 0.2s;
+}
+
+.btn-accion:hover {
+    transform: scale(1.05);
+}
+
+/* --- BOTÓN WHATSAPP (SOLO NÚMERO EN VERDE) --- */
+.btn-ws { 
+    background-color: #25D366; 
+    color: white; 
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.num-ws {
+    color: #ffffff;
+    font-weight: 700;
+}
+
+/* --- BOTÓN VER MAPA --- */
+.btn-mapa { 
+    background-color: #e74c3c; 
+    color: white; 
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+.btn-mapa:hover {
+    background-color: #c0392b;
+}
+
+/* --- CONTENEDOR DE IMAGEN Y BADGE ZOOM --- */
+.contenedor-img-producto {
+    position: relative;
+    cursor: pointer;
+}
+
+.badge-zoom {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: bold;
+}
+
+/* --- MODAL ZOOM COMPLETO --- */
+.modal-zoom {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.85);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.contenido-zoom-img {
+    max-width: 90%;
+    max-height: 85%;
+    border-radius: 8px;
+}
+
+.cerrar-zoom {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    color: white;
+    font-size: 2.5rem;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* --- BOTÓN FLOTANTE VOLVER ARRIBA (UBICADO EN LA PARTE SUPERIOR) --- */
+.btn-flotante-top {
+    position: fixed;
+    top: 25px;                    /* Movido arriba para despejar las tarjetas */
+    right: 20px;
+    bottom: auto;                 /* Anula el posicionamiento inferior previo */
+    width: 42px;
+    height: 42px;
+    background-color: #d35400;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.3rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    z-index: 999;
+    transition: transform 0.2s, background 0.2s;
+}
+
+.btn-flotante-top:hover {
+    background-color: #e67e22;
+    transform: scale(1.1);
 }
 
 /* --- COMPONENTES DEL PORTAL FORMULARIO --- */
@@ -413,3 +543,35 @@ body {
         100% { transform: translateX(0); }
     }
 }
+
+
+/* --- FOOTER PRINCIPAL --- */
+.footer-principal {
+    background-color: #1A3258; /* Café Artesanal */
+    color: #f7f7f5;
+    text-align: center;
+    padding: 25px 20px;
+    margin-top: 50px;
+    border-top: 4px solid #2093AD; /* Naranja Terracota */
+}
+
+.contenedor-footer p {
+    margin: 6px 0;
+    font-size: 0.95rem;
+}
+
+.creditos-footer {
+    font-size: 0.9rem;
+    color: #f7f7f5;
+}
+
+.creditos-footer strong {
+    color: #f39c12; /* Color destacado para los nombres */
+}
+
+.universidad-footer {
+    font-size: 0.82rem;
+    color: #bdc3c7;
+    font-style: italic;
+}
+
