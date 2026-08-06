@@ -32,12 +32,11 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // Conexión a PostgreSQL (credenciales locales de Ubuntu)
+// Conexión a PostgreSQL (Soporta Render y Local)
 const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'manos_granadinas',
-    password: '1234', // Si le pusiste clave al usuario postgres en la BD, ponla aquí
-    port: 5432,
+    connectionString: process.env.DATABASE_URL || 'postgresql://postgres:1234@localhost:5432/manos_granadinas',
+    ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false
+});
 });
 
 // ==========================================
