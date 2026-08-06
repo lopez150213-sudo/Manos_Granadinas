@@ -37,7 +37,6 @@ const pool = new Pool({
     connectionString: process.env.DATABASE_URL || 'postgresql://postgres:1234@localhost:5432/manos_granadinas',
     ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false
 });
-});
 
 // ==========================================
 // ENDPOINTS DE LA API REST
