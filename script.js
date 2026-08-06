@@ -14,13 +14,7 @@ botones.forEach(boton => {
 // ==========================================
 // CENTRAL DE SEGURIDAD Y CONFIGURACIÓN
 // ==========================================
-const TU_NUMERO_WHATSAPP = "50587961435"; // <--- Tu número de Nicaragua (Modifícalo si deseas)
-
-// Base de datos integrada con estados de activación
-const usuariosAutorizados = {
-    "artes_pantanal": { nombreNegocio: "Artesanías El Pantanal", password: "granada2026", estado: "activo", codigoVerificacion: "" },
-    "antojitos_cuevas": { nombreNegocio: "Antojitos Cuevas", password: "panaderia_mary", estado: "activo", codigoVerificacion: "" }
-};
+const TU_NUMERO_WHATSAPP = "50587961435"; 
 
 // Componentes UI
 const authPanel = document.getElementById('auth-panel');
@@ -43,7 +37,8 @@ const nombreNegocioTxt = document.getElementById('nombre-negocio-txt');
 const formProducto = document.getElementById('form-producto');
 
 let negocioActual = "";
-let usuarioEnEsperaDeActivacion = ""; // Guarda el puntero temporal del usuario en proceso
+let emprendedorIdActual = null;
+let usuarioEnEsperaDeActivacion = "";
 
 // Intercambio de subformularios
 tabLogin.addEventListener('click', () => {
@@ -67,8 +62,34 @@ btnObtenerGeo.addEventListener('click', () => {
     }
 });
 
-// 3. Flujo de Registro Avanzado con Corrección de Enlace
-btnRegistrarCuenta.addEventListener('click', () => {
+// 1. Cargar productos almacenados en PostgreSQL al iniciar la app
+async function cargarProductosDesdeBD() {
+    try {
+        const res = await fetch('/api/productos');
+        const productos = await res.json();
+
+        productos.forEach(prod => {
+            const nuevaTarjetaHTML = `
+                <div class="tarjeta animated-in">
+                    <img src="${prod.imagen_url}" alt="${prod.nombre}" class="img-producto">
+                    <div class="info-producto">
+                        <h3>${prod.nombre}</h3>
+                        <p class="autor-tag">Por: ${prod.nombre_negocio || 'Emprendedor'}</p>
+                        <p>${prod.descripcion}</p>
+                        <span class="precio">C$ ${parseInt(prod.precio).toLocaleString()}</span>
+                    </div>
+                </div>`;
+            const dest = document.getElementById(prod.categoria)?.querySelector('.contenedor-productos');
+            if (dest) dest.insertAdjacentHTML('afterbegin', nuevaTarjetaHTML);
+        });
+    } catch (err) {
+        console.error('Error al cargar productos iniciales:', err);
+    }
+}
+document.addEventListener('DOMContentLoaded', cargarProductosDesdeBD);
+
+// 2. Flujo de Registro (Guarda en PostgreSQL)
+btnRegistrarCuenta.addEventListener('click', async () => {
     const regNombre = document.getElementById('reg-nombre-comercial').value.trim();
     const regCorreo = document.getElementById('reg-correo').value.trim();
     const regTelefono = document.getElementById('reg-telefono').value.trim();
@@ -80,65 +101,81 @@ btnRegistrarCuenta.addEventListener('click', () => {
         alert("Completa todos los parámetros e incluye la geoposición.");
         return;
     }
-    if (usuariosAutorizados[regUser]) {
-        alert("El nombre de usuario ya existe.");
-        return;
-    }
 
-    // GENERAR CÓDIGO DE ACTIVACIÓN SECRETO (Aleatorio entre 1000 y 9999)
     const tokenAleatorio = `MG-${Math.floor(1000 + Math.random() * 9000)}`;
 
-    // Insertar la cuenta pero dejarla bloqueada en estado "pendiente"
-    usuariosAutorizados[regUser] = {
-        nombreNegocio: regNombre,
-        password: regPass,
-        estado: "pendiente",
-        codigoVerificacion: tokenAleatorio
-    };
+    try {
+        const respuesta = await fetch('/api/registro', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                nombreNegocio: regNombre,
+                correo: regCorreo,
+                telefono: regTelefono,
+                geoposicion: regGeo,
+                usuario: regUser,
+                password: regPass,
+                codigoVerificacion: tokenAleatorio
+            })
+        });
 
-    usuarioEnEsperaDeActivacion = regUser; // Guardamos quién se está registrando
+        const data = await respuesta.json();
+        if (!respuesta.ok) {
+            alert(data.error || "Error al registrar usuario.");
+            return;
+        }
 
-    // Compilar mensaje estructurado para WhatsApp de forma limpia y segura (Corregido)
-    const textoWhatsApp = encodeURIComponent(
-        `¡Nueva Solicitud de Registro! 🔔 Manos Granadinas\n\n` +
-        `• Negocio: ${regNombre}\n` +
-        `• Usuario creado: ${regUser}\n` +
-        `• Contacto: ${regTelefono} / ${regCorreo}\n` +
-        `• Ubicación: https://www.google.com/maps?q=${regGeo}\n\n` +
-        `🔑 CÓDIGO DE ACTIVACIÓN: ${tokenAleatorio}\n\n` +
-        `(Reenvía este código al emprendedor si apruebas su espacio)`
-    );
+        usuarioEnEsperaDeActivacion = regUser;
 
-    const urlWhatsApp = `https://api.whatsapp.com/send?phone=${TU_NUMERO_WHATSAPP}&text=${textoWhatsApp}`;
-    
-    // Alerta de desarrollo para que sepas el código sin ver WhatsApp obligatoriamente
-    alert(`✨ ¡Ficha Generada con Éxito! ✨\n\nEl código temporal generado para este registro es: ${tokenAleatorio}\n\nAcepta este mensaje para abrir la ventana de WhatsApp.`);
-    
-    // Abrir WhatsApp en pestaña nueva de forma segura
-    window.open(urlWhatsApp, '_blank');
+        const textoWhatsApp = encodeURIComponent(
+            `¡Nueva Solicitud de Registro! 🔔 Manos Granadinas\n\n` +
+            `• Negocio: ${regNombre}\n` +
+            `• Usuario creado: ${regUser}\n` +
+            `• Contacto: ${regTelefono} / ${regCorreo}\n` +
+            `• Ubicación: https://www.google.com/maps?q=${regGeo}\n\n` +
+            `🔑 CÓDIGO DE ACTIVACIÓN: ${tokenAleatorio}\n\n` +
+            `(Reenvía este código al emprendedor si apruebas su espacio)`
+        );
 
-    // Cambiar la pantalla al bloqueador de activación
-    authPanel.style.display = 'none';
-    activationPanel.style.display = 'block';
+        const urlWhatsApp = `https://api.whatsapp.com/send?phone=${TU_NUMERO_WHATSAPP}&text=${textoWhatsApp}`;
+        alert(`✨ ¡Ficha Generada con Éxito! ✨\n\nEl código temporal generado es: ${tokenAleatorio}\n\nAcepta este mensaje para abrir WhatsApp.`);
+        window.open(urlWhatsApp, '_blank');
+
+        authPanel.style.display = 'none';
+        activationPanel.style.display = 'block';
+
+    } catch (err) {
+        alert("Error de conexión con el servidor de base de datos.");
+    }
 });
 
-// 4. Verificación del Código enviado por WhatsApp
-btnVerificarCodigo.addEventListener('click', () => {
+// 3. Verificación del Código enviado por WhatsApp (Actualiza en PostgreSQL)
+btnVerificarCodigo.addEventListener('click', async () => {
     const codigoIngresado = document.getElementById('activation-code-input').value.trim().toUpperCase();
-    const cuenta = usuariosAutorizados[usuarioEnEsperaDeActivacion];
 
-    if (cuenta && cuenta.codigoVerificacion === codigoIngresado) {
-        cuenta.estado = "activo";
-        cuenta.codigoVerificacion = ""; // Limpiamos el token por seguridad
-        
-        alert(`¡Felicidades! La cuenta de "${cuenta.nombreNegocio}" ha sido activada de forma exitosa.\nYa puedes iniciar sesión con tus credenciales.`);
-        
-        document.getElementById('activation-code-input').value = "";
-        activationPanel.style.display = 'none';
-        authPanel.style.display = 'block';
-        tabLogin.click();
-    } else {
-        alert("Código de activación incorrecto. Verifica el texto enviado por el administrador.");
+    try {
+        const res = await fetch('/api/activar', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                usuario: usuarioEnEsperaDeActivacion,
+                codigo: codigoIngresado
+            })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            alert(`¡Felicidades! La cuenta ha sido activada de forma exitosa.\nYa puedes iniciar sesión con tus credenciales.`);
+            document.getElementById('activation-code-input').value = "";
+            activationPanel.style.display = 'none';
+            authPanel.style.display = 'block';
+            tabLogin.click();
+        } else {
+            alert(data.error || "Código de activación incorrecto.");
+        }
+    } catch (err) {
+        alert("Error de red al activar la cuenta.");
     }
 });
 
@@ -147,41 +184,55 @@ btnCancelarActivacion.addEventListener('click', () => {
     authPanel.style.display = 'block';
 });
 
-// 5. Verificación de Login Tradicional con filtro de estado activo
-btnIngresar.addEventListener('click', () => {
+// 4. Login Tradicional autenticado con PostgreSQL
+btnIngresar.addEventListener('click', async () => {
     const usuarioInput = document.getElementById('emp-usuario').value.trim().toLowerCase();
     const passwordInput = document.getElementById('emp-password').value;
 
-    const cuentaEncontrada = usuariosAutorizados[usuarioInput];
+    try {
+        const res = await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ usuario: usuarioInput, password: passwordInput })
+        });
 
-    if (cuentaEncontrada && cuentaEncontrada.password === passwordInput) {
-        
-        if (cuentaEncontrada.estado === "pendiente") {
-            usuarioEnEsperaDeActivacion = usuarioInput;
-            alert("Esta cuenta se encuentra bloqueada debido a que no ha sido activada con su código correspondiente.");
+        const data = await res.json();
+
+        if (res.ok) {
+            if (data.estado === "pendiente") {
+                usuarioEnEsperaDeActivacion = usuarioInput;
+                alert("Esta cuenta se encuentra bloqueada debido a que no ha sido activada con su código correspondiente.");
+                authPanel.style.display = 'none';
+                activationPanel.style.display = 'block';
+                return;
+            }
+
+            negocioActual = data.nombreNegocio;
+            emprendedorIdActual = data.id;
+            nombreNegocioTxt.innerText = negocioActual;
             authPanel.style.display = 'none';
-            activationPanel.style.display = 'block';
-            return;
+            uploadPanel.style.display = 'block';
+            
+            document.getElementById('emp-usuario').value = "";
+            document.getElementById('emp-password').value = "";
+        } else {
+            alert(data.error || "Usuario o contraseña incorrectos.");
         }
-
-        negocioActual = cuentaEncontrada.nombreNegocio;
-        nombreNegocioTxt.innerText = negocioActual;
-        authPanel.style.display = 'none';
-        uploadPanel.style.display = 'block';
-        
-        document.getElementById('emp-usuario').value = "";
-        document.getElementById('emp-password').value = "";
-    } else {
-        alert("Usuario o contraseña incorrectos.");
+    } catch (err) {
+        alert("Error al conectar con el servidor.");
     }
 });
 
 btnCerrarSesion.addEventListener('click', () => {
-    authPanel.style.display = 'block'; uploadPanel.style.display = 'none'; formProducto.reset();
+    authPanel.style.display = 'block';
+    uploadPanel.style.display = 'none';
+    formProducto.reset();
+    emprendedorIdActual = null;
+    negocioActual = "";
 });
 
-// 6. Publicación Automática de Productos
-formProducto.addEventListener('submit', (e) => {
+// 5. Publicación de Productos a PostgreSQL
+formProducto.addEventListener('submit', async (e) => {
     e.preventDefault();
     const cat = document.getElementById('prod-categoria').value;
     const name = document.getElementById('prod-nombre').value;
@@ -189,23 +240,47 @@ formProducto.addEventListener('submit', (e) => {
     const price = document.getElementById('prod-precio').value;
     const file = document.getElementById('prod-foto').files[0];
 
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(event) {
-        const nuevaTarjetaHTML = `
-            <div class="tarjeta animated-in">
-                <img src="${event.target.result}" alt="${name}" class="img-producto">
-                <div class="info-producto">
-                    <h3>${name}</h3>
-                    <p class="autor-tag">Por: ${negocioActual}</p>
-                    <p>${desc}</p>
-                    <span class="precio">C$ ${parseInt(price).toLocaleString()}</span>
-                </div>
-            </div>`;
-        const dest = document.getElementById(cat).querySelector('.contenedor-productos');
-        dest.insertAdjacentHTML('afterbegin', nuevaTarjetaHTML);
-        alert(`¡Publicado en ${cat.toUpperCase()}!`);
-        formProducto.reset();
-    };
-    reader.readAsDataURL(file);
+    if (!file || !emprendedorIdActual) {
+        alert("Asegúrate de haber subido una imagen y de haber iniciado sesión.");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('emprendedorId', emprendedorIdActual);
+    formData.append('categoria', cat);
+    formData.append('nombre', name);
+    formData.append('descripcion', desc);
+    formData.append('precio', price);
+    formData.append('foto', file);
+
+    try {
+        const res = await fetch('/api/productos', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            const nuevaTarjetaHTML = `
+                <div class="tarjeta animated-in">
+                    <img src="${data.producto.imagen_url}" alt="${name}" class="img-producto">
+                    <div class="info-producto">
+                        <h3>${name}</h3>
+                        <p class="autor-tag">Por: ${negocioActual}</p>
+                        <p>${desc}</p>
+                        <span class="precio">C$ ${parseInt(price).toLocaleString()}</span>
+                    </div>
+                </div>`;
+            const dest = document.getElementById(cat).querySelector('.contenedor-productos');
+            if (dest) dest.insertAdjacentHTML('afterbegin', nuevaTarjetaHTML);
+            
+            alert(`¡Publicado con éxito en ${cat.toUpperCase()} y guardado en la base de datos!`);
+            formProducto.reset();
+        } else {
+            alert(data.error || "No se pudo publicar el producto.");
+        }
+    } catch (err) {
+        alert("Error al subir el producto al servidor.");
+    }
 });

@@ -1,0 +1,26 @@
+{
+  "name": "manos_granadinas",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lopez150213-sudo/Manos_Granadinas.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lopez150213-sudo/Manos_Granadinas/issues"
+  },
+  "homepage": "https://github.com/lopez150213-sudo/Manos_Granadinas#readme",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "multer": "^2.2.0",
+    "pg": "^8.22.0"
+  }
+}
