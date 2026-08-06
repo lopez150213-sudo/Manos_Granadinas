@@ -3,35 +3,26 @@ const cors = require('cors');
 const { Pool } = require('pg');
 const multer = require('multer');
 const path = require('path');
-const fs = require('fs');
+const { createClient } = require('@supabase/supabase-js');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Middlewares
 app.use(cors());
 app.use(express.json());
 
-// Servir carpetas estáticas (Frontend y Archivos Subidos)
+// Servir archivos estáticos del Frontend
 app.use(express.static(__dirname));
 
-const uploadDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir);
-}
-app.use('/uploads', express.static(uploadDir));
+// Configuración del cliente de Supabase
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
 
-// Configuración de almacenamiento de imágenes con Multer
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, 'uploads/'),
-    filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, uniqueSuffix + path.extname(file.originalname));
-    }
-});
-const upload = multer({ storage });
+// Configuración de Multer usando Memoria RAM (ideal para la nube/Supabase)
+const upload = multer({ storage: multer.memoryStorage() });
 
-// Conexión a PostgreSQL (credenciales locales de Ubuntu)
 // Conexión a PostgreSQL (Soporta Render y Local)
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL || 'postgresql://postgres:1234@localhost:5432/manos_granadinas',
@@ -114,17 +105,47 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
-// 5. Publicación de Producto con Foto
+// 5. Publicación de Producto con Foto alojada en Supabase Storage
 app.post('/api/productos', upload.single('foto'), async (req, res) => {
     const { emprendedorId, categoria, nombre, descripcion, precio } = req.body;
-    const imagenUrl = `/uploads/${req.file.filename}`;
+    const file = req.file;
 
     try {
+        if (!file) {
+            return res.status(400).json({ error: 'Debe adjuntar una imagen del producto' });
+        }
+
+        // Crear un nombre único para la imagen
+        const fileExt = path.extname(file.originalname);
+        const fileName = `${Date.now()}-${Math.round(Math.random() * 1E9)}${fileExt}`;
+
+        // 1. Subir el buffer de la foto al bucket 'productos-imagenes' en Supabase
+        const { data: uploadData, error: uploadError } = await supabase.storage
+            .from('productos-imagenes')
+            .upload(fileName, file.buffer, {
+                contentType: file.mimetype,
+                upsert: false
+            });
+
+        if (uploadError) {
+            console.error('Error al subir a Supabase:', uploadError);
+            return res.status(500).json({ error: 'Error al almacenar la imagen en Supabase' });
+        }
+
+        // 2. Obtener la URL pública generada por Supabase
+        const { data: publicUrlData } = supabase.storage
+            .from('productos-imagenes')
+            .getPublicUrl(fileName);
+
+        const imagenUrl = publicUrlData.publicUrl;
+
+        // 3. Registrar el producto en la Base de Datos PostgreSQL en Render
         const result = await pool.query(
             `INSERT INTO productos (emprendedor_id, categoria, nombre, descripcion, precio, imagen_url)
              VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
             [emprendedorId, categoria, nombre, descripcion, precio, imagenUrl]
         );
+
         res.json({ ok: true, producto: result.rows[0] });
     } catch (err) {
         console.error(err);
@@ -134,5 +155,5 @@ app.post('/api/productos', upload.single('foto'), async (req, res) => {
 
 // Iniciar servidor
 app.listen(PORT, () => {
-    console.log(`🚀 Servidor listo en http://localhost:${PORT}`);
+    console.log(`🚀 Servidor corriendo en el puerto ${PORT}`);
 });
