@@ -89,12 +89,13 @@ async function cargarProductosDesdeBD() {
         <span class="num-ws">${prod.telefono}</span>
     </a>
 ` : ''}
-                               ${(prod.lat && prod.lng) ? `
-    <a href="https://www.google.com/maps?q=${prod.lat},${prod.lng}" 
-       target="_blank" class="btn-accion btn-mapa" title="Ver ubicación">
+                               ${(prod.geoposicion || prod.latitud) ? `
+    <a href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent((prod.geoposicion || `${prod.latitud},${prod.longitud}`).trim())}" 
+       target="_blank" class="btn-accion btn-mapa" title="Ver Ruta">
         📍 Ver mapa
     </a>
 ` : ''}
+
                             </div>
                         </div>
                     </div>
