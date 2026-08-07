@@ -92,7 +92,7 @@ async function cargarProductosDesdeBD() {
                                ${(prod.geoposicion || prod.latitud) ? `
     <a href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent((prod.geoposicion || `${prod.latitud},${prod.longitud}`).trim())}" 
        target="_blank" class="btn-accion btn-mapa" title="Ver Ruta">
-        📍 Ver mapa
+        MAPA
     </a>
 ` : ''}
 
