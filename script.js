@@ -71,12 +71,32 @@ async function cargarProductosDesdeBD() {
         productos.forEach(prod => {
             const nuevaTarjetaHTML = `
                 <div class="tarjeta animated-in">
-                    <img src="${prod.imagen_url}" alt="${prod.nombre}" class="img-producto">
+                    <div class="contenedor-img-producto" onclick="abrirZoomImage('${prod.imagen_url}')">
+                        <img src="${prod.imagen_url}" alt="${prod.nombre}" class="img-producto">
+                        <span class="badge-zoom">🔍 Zoom</span>
+                    </div>
                     <div class="info-producto">
                         <h3>${prod.nombre}</h3>
                         <p class="autor-tag">Por: ${prod.nombre_negocio || 'Emprendedor'}</p>
                         <p>${prod.descripcion}</p>
-                        <span class="precio">C$ ${parseInt(prod.precio).toLocaleString()}</span>
+                        
+                        <div class="footer-tarjeta">
+                            <span class="precio">C$ ${parseInt(prod.precio).toLocaleString()}</span>
+                            <div class="acciones-emprendedor">
+                                ${prod.telefono ? `
+                                    <a href="https://wa.me/505${prod.telefono.replace(/\s+/g, '')}?text=${encodeURIComponent('Hola, vi tu producto ' + prod.nombre + ' en Manos Granadinas.')}" 
+                                       target="_blank" class="btn-accion btn-ws" title="WhatsApp">
+                                        💬
+                                    </a>
+                                ` : ''}
+                                ${prod.geoposicion ? `
+                                    <a href="https://www.google.com/maps/dir/?api=1&destination=${prod.geoposicion.replace(/\s+/g, '')}" 
+                                       target="_blank" class="btn-accion btn-mapa" title="Ver Ruta">
+                                        📍
+                                    </a>
+                                ` : ''}
+                            </div>
+                        </div>
                     </div>
                 </div>`;
             const dest = document.getElementById(prod.categoria)?.querySelector('.contenedor-productos');
@@ -87,6 +107,33 @@ async function cargarProductosDesdeBD() {
     }
 }
 document.addEventListener('DOMContentLoaded', cargarProductosDesdeBD);
+
+// Lógica del Zoom de Imagen
+function abrirZoomImage(url) {
+    const modal = document.getElementById('modal-zoom');
+    const imgAmpliada = document.getElementById('img-zoom-ampliada');
+    imgAmpliada.src = url;
+    modal.style.display = 'flex';
+}
+
+document.getElementById('cerrar-zoom')?.addEventListener('click', () => {
+    document.getElementById('modal-zoom').style.display = 'none';
+});
+
+// Control del Botón Flotante para Volver Arriba
+const btnSubir = document.getElementById('btn-volver-arriba');
+
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 300) {
+        btnSubir.style.display = 'block';
+    } else {
+        btnSubir.style.display = 'none';
+    }
+});
+
+btnSubir?.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+});
 
 // 2. Flujo de Registro (Guarda en PostgreSQL)
 btnRegistrarCuenta.addEventListener('click', async () => {
@@ -149,7 +196,7 @@ btnRegistrarCuenta.addEventListener('click', async () => {
     }
 });
 
-// 3. Verificación del Código enviado por WhatsApp (Actualiza en PostgreSQL)
+// 3. Verificación del Código enviado por WhatsApp
 btnVerificarCodigo.addEventListener('click', async () => {
     const codigoIngresado = document.getElementById('activation-code-input').value.trim().toUpperCase();
 
@@ -184,7 +231,7 @@ btnCancelarActivacion.addEventListener('click', () => {
     authPanel.style.display = 'block';
 });
 
-// 4. Login Tradicional autenticado con PostgreSQL
+// 4. Login Tradicional
 btnIngresar.addEventListener('click', async () => {
     const usuarioInput = document.getElementById('emp-usuario').value.trim().toLowerCase();
     const passwordInput = document.getElementById('emp-password').value;
@@ -231,7 +278,7 @@ btnCerrarSesion.addEventListener('click', () => {
     negocioActual = "";
 });
 
-// 5. Publicación de Productos a PostgreSQL
+// 5. Publicación de Productos
 formProducto.addEventListener('submit', async (e) => {
     e.preventDefault();
     const cat = document.getElementById('prod-categoria').value;
@@ -264,12 +311,18 @@ formProducto.addEventListener('submit', async (e) => {
         if (res.ok) {
             const nuevaTarjetaHTML = `
                 <div class="tarjeta animated-in">
-                    <img src="${data.producto.imagen_url}" alt="${name}" class="img-producto">
+                    <div class="contenedor-img-producto" onclick="abrirZoomImage('${data.producto.imagen_url}')">
+                        <img src="${data.producto.imagen_url}" alt="${name}" class="img-producto">
+                        <span class="badge-zoom">🔍 Zoom</span>
+                    </div>
                     <div class="info-producto">
                         <h3>${name}</h3>
                         <p class="autor-tag">Por: ${negocioActual}</p>
                         <p>${desc}</p>
-                        <span class="precio">C$ ${parseInt(price).toLocaleString()}</span>
+                        
+                        <div class="footer-tarjeta">
+                            <span class="precio">C$ ${parseInt(price).toLocaleString()}</span>
+                        </div>
                     </div>
                 </div>`;
             const dest = document.getElementById(cat).querySelector('.contenedor-productos');

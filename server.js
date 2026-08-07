@@ -20,10 +20,10 @@ const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// Configuración de Multer usando Memoria RAM (ideal para la nube/Supabase)
+// Configuración de Multer usando Memoria RAM (Ideal para nubes como Render + Supabase Storage)
 const upload = multer({ storage: multer.memoryStorage() });
 
-// Conexión a PostgreSQL (Soporta Render y Local)
+// Conexión a PostgreSQL (Soporta Render y entorno Local)
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL || 'postgresql://postgres:1234@localhost:5432/manos_granadinas',
     ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false
@@ -33,11 +33,11 @@ const pool = new Pool({
 // ENDPOINTS DE LA API REST
 // ==========================================
 
-// 1. Obtener todos los productos registrados
+// 1. Obtener todos los productos (Incluye teléfono y geoposición para los botones de la tarjeta)
 app.get('/api/productos', async (req, res) => {
     try {
         const query = `
-            SELECT p.*, e.nombre_negocio 
+            SELECT p.*, e.nombre_negocio, e.telefono, e.geoposicion 
             FROM productos p 
             JOIN emprendedores e ON p.emprendedor_id = e.id 
             ORDER BY p.creado_en DESC
@@ -45,7 +45,7 @@ app.get('/api/productos', async (req, res) => {
         const result = await pool.query(query);
         res.json(result.rows);
     } catch (err) {
-        console.error(err);
+        console.error('Error al obtener productos:', err);
         res.status(500).json({ error: 'Error al obtener productos' });
     }
 });
@@ -61,8 +61,8 @@ app.post('/api/registro', async (req, res) => {
         );
         res.json({ ok: true, id: result.rows[0].id });
     } catch (err) {
-        console.error(err);
-        res.status(400).json({ error: 'El usuario ya existe o hubo un problema.' });
+        console.error('Error en el registro:', err);
+        res.status(400).json({ error: 'El usuario ya existe o hubo un problema al registrar.' });
     }
 });
 
@@ -78,10 +78,11 @@ app.post('/api/activar', async (req, res) => {
             await pool.query("UPDATE emprendedores SET estado = 'activo', codigo_verificacion = '' WHERE id = $1", [user.id]);
             res.json({ ok: true, mensaje: 'Cuenta activada exitosamente' });
         } else {
-            res.status(400).json({ error: 'Código incorrecto' });
+            res.status(400).json({ error: 'Código de activación incorrecto' });
         }
     } catch (err) {
-        res.status(500).json({ error: 'Error en el servidor' });
+        console.error('Error en la activación:', err);
+        res.status(500).json({ error: 'Error en el servidor al activar' });
     }
 });
 
@@ -101,7 +102,8 @@ app.post('/api/login', async (req, res) => {
             estado: user.estado
         });
     } catch (err) {
-        res.status(500).json({ error: 'Error en el login' });
+        console.error('Error en el login:', err);
+        res.status(500).json({ error: 'Error en el servidor durante el login' });
     }
 });
 
@@ -119,7 +121,7 @@ app.post('/api/productos', upload.single('foto'), async (req, res) => {
         const fileExt = path.extname(file.originalname);
         const fileName = `${Date.now()}-${Math.round(Math.random() * 1E9)}${fileExt}`;
 
-        // 1. Subir el buffer de la foto al bucket 'productos-imagenes' en Supabase
+        // 1. Subir el buffer de la foto al bucket 'imagenes' en Supabase
         const { data: uploadData, error: uploadError } = await supabase.storage
             .from('imagenes')
             .upload(fileName, file.buffer, {
@@ -132,14 +134,14 @@ app.post('/api/productos', upload.single('foto'), async (req, res) => {
             return res.status(500).json({ error: 'Error al almacenar la imagen en Supabase' });
         }
 
-        // 2. Obtener la URL pública generada por Supabase
+        // 2. Obtener la URL pública generada por Supabase Storage
         const { data: publicUrlData } = supabase.storage
             .from('imagenes')
             .getPublicUrl(fileName);
 
         const imagenUrl = publicUrlData.publicUrl;
 
-        // 3. Registrar el producto en la Base de Datos PostgreSQL en Render
+        // 3. Registrar el producto en la Base de Datos PostgreSQL
         const result = await pool.query(
             `INSERT INTO productos (emprendedor_id, categoria, nombre, descripcion, precio, imagen_url)
              VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
@@ -148,7 +150,7 @@ app.post('/api/productos', upload.single('foto'), async (req, res) => {
 
         res.json({ ok: true, producto: result.rows[0] });
     } catch (err) {
-        console.error(err);
+        console.error('Error al guardar el producto:', err);
         res.status(500).json({ error: 'Error al guardar el producto' });
     }
 });
