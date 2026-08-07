@@ -225,19 +225,14 @@ body {
     transform: scale(1.05);
 }
 
-/* --- BOTÓN WHATSAPP DESTACADO EN VERDE Y CON TEXTO/NÚMERO --- */
+/* --- BOTÓN WHATSAPP (SOLO NÚMERO EN VERDE) --- */
 .btn-ws { 
     background-color: #25D366; 
     color: white; 
-    padding: 6px 14px;
+    padding: 8px 16px;
     border-radius: 20px;
-    gap: 6px;
     font-weight: bold;
-    font-size: 0.88rem;
-}
-
-.icono-ws {
-    font-size: 1.1rem;
+    font-size: 0.9rem;
 }
 
 .num-ws {
@@ -245,14 +240,19 @@ body {
     font-weight: 700;
 }
 
-/* --- BOTÓN DE NAVEGACIÓN A MAPA --- */
+/* --- BOTÓN VER MAPA --- */
 .btn-mapa { 
     background-color: #e74c3c; 
     color: white; 
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    font-size: 1.2rem;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+.btn-mapa:hover {
+    background-color: #c0392b;
 }
 
 /* --- CONTENEDOR DE IMAGEN Y BADGE ZOOM --- */
@@ -302,22 +302,22 @@ body {
     font-weight: bold;
 }
 
-/* --- BOTÓN FLOTANTE VOLVER ARRIBA (REUBICADO A LA IZQUIERDA) --- */
+/* --- BOTÓN FLOTANTE VOLVER ARRIBA (UBICADO EN LA PARTE SUPERIOR) --- */
 .btn-flotante-top {
     position: fixed;
-    bottom: 25px;
-    left: 20px;                   /* Movido a la izquierda para no tapar los botones */
-    right: auto;                  /* Anula el posicionamiento derecho previo */
-    width: 45px;
-    height: 45px;
+    top: 25px;                    /* Movido arriba para despejar las tarjetas */
+    right: 20px;
+    bottom: auto;                 /* Anula el posicionamiento inferior previo */
+    width: 42px;
+    height: 42px;
     background-color: #d35400;
     color: white;
     border: none;
     border-radius: 50%;
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     font-weight: bold;
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
     z-index: 999;
     transition: transform 0.2s, background 0.2s;
 }

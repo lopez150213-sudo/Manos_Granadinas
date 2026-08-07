@@ -83,19 +83,18 @@ async function cargarProductosDesdeBD() {
                         <div class="footer-tarjeta">
                             <span class="precio">C$ ${parseInt(prod.precio).toLocaleString()}</span>
                             <div class="acciones-emprendedor">
-                                ${prod.telefono ? `
+                    ${prod.telefono ? `
     <a href="https://wa.me/505${prod.telefono.replace(/\s+/g, '')}?text=${encodeURIComponent('Hola, vi tu producto ' + prod.nombre + ' en Manos Granadinas.')}" 
        target="_blank" class="btn-accion btn-ws" title="WhatsApp">
-        <span class="icono-ws">💬</span>
         <span class="num-ws">${prod.telefono}</span>
     </a>
 ` : ''}
-                                ${prod.geoposicion ? `
-                                    <a href="https://www.google.com/maps/dir/?api=1&destination=${prod.geoposicion.replace(/\s+/g, '')}" 
-                                       target="_blank" class="btn-accion btn-mapa" title="Ver Ruta">
-                                        📍
-                                    </a>
-                                ` : ''}
+                               ${(prod.lat && prod.lng) ? `
+    <a href="https://www.google.com/maps?q=${prod.lat},${prod.lng}" 
+       target="_blank" class="btn-accion btn-mapa" title="Ver ubicación">
+        📍 Ver mapa
+    </a>
+` : ''}
                             </div>
                         </div>
                     </div>
