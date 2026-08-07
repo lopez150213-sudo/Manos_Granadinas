@@ -542,3 +542,35 @@ body {
         100% { transform: translateX(0); }
     }
 }
+
+
+/* --- FOOTER PRINCIPAL --- */
+.footer-principal {
+    background-color: #5d3523; /* Café Artesanal */
+    color: #f7f7f5;
+    text-align: center;
+    padding: 25px 20px;
+    margin-top: 50px;
+    border-top: 4px solid #d35400; /* Naranja Terracota */
+}
+
+.contenedor-footer p {
+    margin: 6px 0;
+    font-size: 0.95rem;
+}
+
+.creditos-footer {
+    font-size: 0.9rem;
+    color: #f7f7f5;
+}
+
+.creditos-footer strong {
+    color: #f39c12; /* Color destacado para los nombres */
+}
+
+.universidad-footer {
+    font-size: 0.82rem;
+    color: #bdc3c7;
+    font-style: italic;
+}
+
