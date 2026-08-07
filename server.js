@@ -121,7 +121,7 @@ app.post('/api/productos', upload.single('foto'), async (req, res) => {
 
         // 1. Subir el buffer de la foto al bucket 'productos-imagenes' en Supabase
         const { data: uploadData, error: uploadError } = await supabase.storage
-            .from('productos-imagenes')
+            .from('imagenes')
             .upload(fileName, file.buffer, {
                 contentType: file.mimetype,
                 upsert: false
@@ -134,7 +134,7 @@ app.post('/api/productos', upload.single('foto'), async (req, res) => {
 
         // 2. Obtener la URL pública generada por Supabase
         const { data: publicUrlData } = supabase.storage
-            .from('productos-imagenes')
+            .from('imagenes')
             .getPublicUrl(fileName);
 
         const imagenUrl = publicUrlData.publicUrl;
