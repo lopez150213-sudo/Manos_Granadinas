@@ -209,27 +209,51 @@ body {
 .acciones-emprendedor {
     display: flex;
     gap: 8px;
+    align-items: center;
 }
 
 .btn-accion {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
     text-decoration: none;
-    font-size: 1.2rem;
     box-shadow: 0 2px 5px rgba(0,0,0,0.15);
     transition: transform 0.2s, background 0.2s;
 }
 
 .btn-accion:hover {
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 
-.btn-ws { background-color: #25D366; color: white; }
-.btn-mapa { background-color: #e74c3c; color: white; }
+/* --- BOTÓN WHATSAPP DESTACADO EN VERDE Y CON TEXTO/NÚMERO --- */
+.btn-ws { 
+    background-color: #25D366; 
+    color: white; 
+    padding: 6px 14px;
+    border-radius: 20px;
+    gap: 6px;
+    font-weight: bold;
+    font-size: 0.88rem;
+}
+
+.icono-ws {
+    font-size: 1.1rem;
+}
+
+.num-ws {
+    color: #ffffff;
+    font-weight: 700;
+}
+
+/* --- BOTÓN DE NAVEGACIÓN A MAPA --- */
+.btn-mapa { 
+    background-color: #e74c3c; 
+    color: white; 
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+}
 
 /* --- CONTENEDOR DE IMAGEN Y BADGE ZOOM --- */
 .contenedor-img-producto {
@@ -278,21 +302,22 @@ body {
     font-weight: bold;
 }
 
-/* --- BOTÓN FLOTANTE PARA VOLVER ARRIBA --- */
+/* --- BOTÓN FLOTANTE VOLVER ARRIBA (REUBICADO A LA IZQUIERDA) --- */
 .btn-flotante-top {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
+    bottom: 25px;
+    left: 20px;                   /* Movido a la izquierda para no tapar los botones */
+    right: auto;                  /* Anula el posicionamiento derecho previo */
     width: 45px;
     height: 45px;
     background-color: #d35400;
     color: white;
     border: none;
     border-radius: 50%;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     font-weight: bold;
     cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     z-index: 999;
     transition: transform 0.2s, background 0.2s;
 }
