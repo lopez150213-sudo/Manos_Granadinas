@@ -39,7 +39,7 @@ body {
 }
 
 .lista-servicios li {
-    background-color: #1A3258; /* Naranja Terracota */
+    background-color: #1A3258; 
     color: white;
     padding: 12px 50px;
     border: 2px solid #000;
@@ -51,6 +51,7 @@ body {
     user-select: none;
     text-align: center;
     white-space: nowrap;
+    font-size: 1.3rem;
 }
 
 .lista-servicios li:hover {
@@ -61,7 +62,7 @@ body {
 
 .lista-servicios li:active {
     transform: translateY(2px);
-    background-color: #2537fc;
+    background-color: #2b58a0;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
@@ -311,7 +312,7 @@ body {
     bottom: auto;                 /* Anula el posicionamiento inferior previo */
     width: 42px;
     height: 42px;
-    background-color: #d35400;
+    background-color: #1A3258;
     color: white;
     border: none;
     border-radius: 50%;
@@ -324,7 +325,7 @@ body {
 }
 
 .btn-flotante-top:hover {
-    background-color: #e67e22;
+    background-color: #244171;
     transform: scale(1.1);
 }
 
@@ -547,20 +548,12 @@ body {
 
 /* --- FOOTER PRINCIPAL --- */
 .footer-principal {
-<<<<<<< HEAD
     background-color: #1A3258; /* Café Artesanal */
-=======
-    background-color: #5d3523; /* Café Artesanal */
->>>>>>> 7da71337e5a3dab17b8a70655d251114c8b4eded
     color: #f7f7f5;
     text-align: center;
     padding: 25px 20px;
     margin-top: 50px;
-<<<<<<< HEAD
     border-top: 4px solid #2093AD; /* Naranja Terracota */
-=======
-    border-top: 4px solid #d35400; /* Naranja Terracota */
->>>>>>> 7da71337e5a3dab17b8a70655d251114c8b4eded
 }
 
 .contenedor-footer p {
