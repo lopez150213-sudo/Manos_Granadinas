@@ -547,12 +547,20 @@ body {
 
 /* --- FOOTER PRINCIPAL --- */
 .footer-principal {
+<<<<<<< HEAD
     background-color: #1A3258; /* Café Artesanal */
+=======
+    background-color: #5d3523; /* Café Artesanal */
+>>>>>>> 7da71337e5a3dab17b8a70655d251114c8b4eded
     color: #f7f7f5;
     text-align: center;
     padding: 25px 20px;
     margin-top: 50px;
+<<<<<<< HEAD
     border-top: 4px solid #2093AD; /* Naranja Terracota */
+=======
+    border-top: 4px solid #d35400; /* Naranja Terracota */
+>>>>>>> 7da71337e5a3dab17b8a70655d251114c8b4eded
 }
 
 .contenedor-footer p {
